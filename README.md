@@ -1,6 +1,9 @@
 # v2g-ws-dissectors
 V2G (Vehicle-to-Grid) Wireshark LUA dissectors (ISO 15118-2)
 
+## By Argus Cyber Security Ltd.
+https://argus-sec.com/
+
 ## Installation
 In order to use these LUA plugins, they need to be added to Wireshark's 'personal plugins' folder.
 
