@@ -83,7 +83,7 @@ function p_sdpres.dissector(buf,pinfo,root)
 		if sec_num == NO_TLS then
 			DissectorTable.get("tcp.port"):add(buf(16,2):uint(),Dissector.get("v2gtp"))
 		elseif sec_num == WITH_TLS then
-			DissectorTable.get("tcp.port"):add(buf(16,2):uint(),Dissector.get("tls"))
+			DissectorTable.get("tls.port"):add(buf(16,2):uint(),Dissector.get("v2gtp"))
 		end
 	end
 end

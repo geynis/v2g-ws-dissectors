@@ -103,4 +103,5 @@ function p_v2gtp.init()
     -- register protocol
     DissectorTable.get("udp.port"):add(15118,p_v2gtp)
 	DissectorTable.get("tcp.port"):add(15118,p_v2gtp)
+	DissectorTable.get("tls.port"):add(15118,p_v2gtp)
 end
