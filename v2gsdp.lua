@@ -15,7 +15,7 @@ local WITH_TLS = 0
 local NO_TLS = 16
 
 local sec_types = {
-    [WITH_TLS]     = "Secured with TLS",  			   -- 0x00
+    [WITH_TLS]  = "Secured with TLS",              -- 0x00
     [NO_TLS]    = "No transport layer security",   -- 0x10
 }
 
@@ -31,7 +31,7 @@ function p_sdpreq.dissector(buf,pinfo,root)
     -- add protocol fields to subtree
 
     -- Security
-	local sec_num = buf(0,1):uint()
+    local sec_num = buf(0,1):uint()
     local sec = subtree:add(f_sec,buf(0,1))
     if sec_types[sec_num] ~= nil then
         sec:append_text(" (" .. sec_types[sec_num] ..")")
@@ -39,11 +39,11 @@ function p_sdpreq.dissector(buf,pinfo,root)
         pinfo.cols.info = tostring(pinfo.cols.info) .. ", " .. sec_types[sec_num]
     end
 
-	-- Transport Protocol
+    -- Transport Protocol
     local tp = subtree:add(f_tp,buf(1,1))
-	if buf(1,1):uint() == 0 then
-		tp:append_text(" (TCP)")
-	end
+    if buf(1,1):uint() == 0 then
+        tp:append_text(" (TCP)")
+    end
 end
 
 -- V2G SDP Response
@@ -62,13 +62,13 @@ function p_sdpres.dissector(buf,pinfo,root)
     subtree = root:add(p_sdpres,buf(0))
 
     -- add protocol fields to subtree
-	-- SECC IPv6
-	subtree:add(f_ipv6,buf(0,16))
-	-- SECC Port
+    -- SECC IPv6
+    subtree:add(f_ipv6,buf(0,16))
+    -- SECC Port
     subtree:add(f_port,buf(16,2))
 
-	-- Security
-	local sec_num = buf(18,1):uint()
+    -- Security
+    local sec_num = buf(18,1):uint()
     local sec = subtree:add(f_res_sec,buf(18,1))
     if sec_types[sec_num] ~= nil then
         sec:append_text(" (" .. sec_types[sec_num] ..")")
@@ -76,14 +76,14 @@ function p_sdpres.dissector(buf,pinfo,root)
         pinfo.cols.info = tostring(pinfo.cols.info) .. ", " .. sec_types[sec_num]
     end
 
-	-- Transport Protocol
+    -- Transport Protocol
     local tp = subtree:add(f_res_tp,buf(19,1))
-	if buf(19,1):uint() == 0 then
-		tp:append_text(" (TCP)")
-		if sec_num == NO_TLS then
-			DissectorTable.get("tcp.port"):add(buf(16,2):uint(),Dissector.get("v2gtp"))
-		elseif sec_num == WITH_TLS then
-			DissectorTable.get("tls.port"):add(buf(16,2):uint(),Dissector.get("v2gtp"))
-		end
-	end
+    if buf(19,1):uint() == 0 then
+        tp:append_text(" (TCP)")
+        if sec_num == NO_TLS then
+            DissectorTable.get("tcp.port"):add(buf(16,2):uint(),Dissector.get("v2gtp"))
+        elseif sec_num == WITH_TLS then
+            DissectorTable.get("tls.port"):add(buf(16,2):uint(),Dissector.get("v2gtp"))
+        end
+    end
 end

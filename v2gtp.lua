@@ -12,7 +12,7 @@ local f_ipv = ProtoField.uint8("v2gtp.inverseprotoversion","Inverse Protocol Ver
 local f_pt  = ProtoField.uint16("v2gtp.payloadtype","Payload Type",base.HEX)
 local f_len = ProtoField.uint32("v2gtp.length","Payload Length",base.HEX)
 
-local EXI 	  = 32769
+local EXI       = 32769
 local SDP_REQ = 36864
 local SDP_RES = 36865
 
@@ -67,7 +67,7 @@ local function v2gtp_pdu_dissect(buf,pinfo,root)
         end
     end
 
-	-- Length
+    -- Length
     subtree:add(f_len,buf(4,4))
 
     -- EXI / SDP payload --
@@ -80,7 +80,7 @@ local function v2gtp_pdu_dissect(buf,pinfo,root)
         Dissector.get("exi"):call(buf(V2GTP_HDR_LENGTH):tvb(),pinfo,root)
     end
 
-	-- Dissect next V2GTP packet ?!?!--
+    -- Dissect next V2GTP packet ?!?!--
     local end_of_current_packet = get_v2gtp_length(buf,pinfo,0)
     local next_packet_length = buf:len() - end_of_current_packet
     if next_packet_length > 0 then
@@ -102,6 +102,6 @@ end
 function p_v2gtp.init()
     -- register protocol
     DissectorTable.get("udp.port"):add(15118,p_v2gtp)
-	DissectorTable.get("tcp.port"):add(15118,p_v2gtp)
-	DissectorTable.get("tls.port"):add(15118,p_v2gtp)
+    DissectorTable.get("tcp.port"):add(15118,p_v2gtp)
+    DissectorTable.get("tls.port"):add(15118,p_v2gtp)
 end
